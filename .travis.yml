@@ -1,0 +1,20 @@
+sudo: required
+services:
+  - docker
+
+before_install
+  - docker build -t doublehrajput/client-test -f ./packages/client/Dockerfile.dev ./packages/client
+
+script: 
+  - docker run doublehrajput/client-test yarn test
+
+after_sucess
+  - docker build -t doublehrajput/client-build ./packages/client
+  - docker build -t doublehrajput/server-build ./packages/server
+  - docker build -t doublehrajput/worker-build ./packages/worker
+  - docker build -t doublehrajput/nginx-build ./nginx
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  - docker push doublehrajput/client-build 
+  - docker push doublehrajput/server-build 
+  - docker push doublehrajput/worker-build 
+  - docker push doublehrajput/nginx-build 
