@@ -1,0 +1,45 @@
+version: '3'
+services:
+  postgres:
+    image: 'postgres:11-alpine3.17'
+    environment:
+      POSTGRES_DB: "db"
+      POSTGRES_HOST_AUTH_METHOD: "trust"
+  redis:
+    image: 'redis:6.0-alpine3.18'
+  api:
+    build:
+      dockerfile: "Dockerfile.dev"
+      context: "./packages/server"
+    volumes:
+      - "/app/node_modules"
+      - "./packages/server:/app"
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - PG_DATABASE=db
+      - PG_HOST=postgres
+      - PG_USER=postgres
+      - PG_PASSWORD=postgres_password
+      - PG_PORT=5432
+  client:
+    build:
+      dockerfile: "Dockerfile.dev"
+      context: "./packages/client"
+    volumes:
+      - "/app/node_modules"
+      - "./packages/client:/app"
+  worker:
+    build:
+      dockerfile: "Dockerfile.dev"
+      context: "./packages/worker"
+    volumes:
+      - "/app/node_modules"
+      - "./packages/worker:/app"
+  nginx:
+    restart: always
+    build:
+      dockerfile: "Dockerfile.dev"
+      context: "./nginx"
+    ports:
+      - "3050:80"

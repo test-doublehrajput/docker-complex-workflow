@@ -1,0 +1,14 @@
+# docker build -t complex-workflow/server -f Dockerfile.dev .
+# docker run --rm complex-workflow/server
+
+FROM node:16-alpine
+
+WORKDIR "/app"
+
+COPY ./package.json ./
+
+RUN yarn
+
+COPY . .
+
+CMD [ "yarn", "dev" ]

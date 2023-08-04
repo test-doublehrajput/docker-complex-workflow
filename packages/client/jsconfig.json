@@ -1,0 +1,29 @@
+{
+  "compilerOptions": {
+    "module": "ESNext",
+    "moduleResolution": "Node",
+    "target": "ES2020",
+    "jsx": "react-jsx",
+    "checkJs": true,
+    "strictNullChecks": false,
+    "strictFunctionTypes": true,
+    "typeRoots": [
+      "types"
+    ],
+    "noImplicitAny": false,
+    "baseUrl": "./",
+    "paths": {
+      "@app/*": [
+        "./src/*"
+      ],
+    },
+  },
+  "exclude": [
+    "node_modules",
+    "**/node_modules/*"
+  ],
+  "include": [
+    "./src/**/*",
+    "./types/*.ts"
+  ]
+}
